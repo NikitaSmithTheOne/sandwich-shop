@@ -3,7 +3,7 @@
 // *** NPM ***
 import React, { useState } from 'react';
 import { Button, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 // *** OTHER ***
 import SandwichBread from '../../components/SandwichIngridients/SandwichBread';
@@ -12,44 +12,50 @@ import SandwichCheese from '../../components/SandwichIngridients/SandwichCheese'
 import SandwichCucumber from '../../components/SandwichIngridients/SandwichCucumber';
 
 // *** STYLES ***
-const useStyles = makeStyles({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        marginTop: '20px',
-        boxSizing: 'border-box',
-    },
-    sandwichManagement: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        width: '600px',
-        marginBottom: '10px',
-    },
-    sandwichOutput: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-    },
-    baconButton: {
-        color: '#b33e10',
-        border: '2px solid #b33e10',
-        marginRight: '10px',
-    },
-    cheeseButton: {
-        color: '#f5c451',
-        border: '2px solid #f5c451',
-        marginRight: '10px',
-    },
-    cucumberButton: {
-        color: '#36b310',
-        border: '2px solid #36b310',
-        marginRight: '10px',
-    },
-});
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: '20px',
+            boxSizing: 'border-box',
+        },
+        title: {
+            color: theme.palette.secondary.main,
+            marginBottom: '15px',
+        },
+        sandwichManagement: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            width: '600px',
+            marginBottom: '10px',
+        },
+        sandwichOutput: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+        },
+        baconButton: {
+            color: '#b33e10',
+            border: '2px solid #b33e10',
+            marginRight: '10px',
+        },
+        cheeseButton: {
+            color: '#f5c451',
+            border: '2px solid #f5c451',
+            marginRight: '10px',
+        },
+        cucumberButton: {
+            color: '#36b310',
+            border: '2px solid #36b310',
+            marginRight: '10px',
+        },
+    }),
+);
 
 // *** TYPES ***
 type SandwichIngredientType = 'bacon' | 'cheese' | 'cucumber';
@@ -100,6 +106,11 @@ const SandwichBuilder = (): JSX.Element => {
 
     return (
         <div className={classes.root}>
+            {/* TITLE */}
+            <Typography variant="h4" component="h1" className={classes.title}>
+                CHOICE YOUR SANDWICH!
+            </Typography>
+
             {/* SANDWICH MANAGEMENT */}
             <div className={classes.sandwichManagement}>
                 {/* BACON */}
