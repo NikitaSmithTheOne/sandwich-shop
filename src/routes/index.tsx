@@ -13,7 +13,7 @@ export interface IRouterObject {
     name: string;
     path: string;
     exact: boolean;
-    renderFn: () => JSX.Element;
+    RenderFn: () => JSX.Element;
 }
 
 export const allRoutes = [...homeRoutes, ...basketRouter];
@@ -22,8 +22,8 @@ const Routes = (): JSX.Element => {
     return (
         <Switch>
             {/* ALL ROUTES */}
-            {allRoutes.map(({ name, path, exact, renderFn }) => (
-                <Route exact={exact} path={path} key={name} render={() => renderFn()} />
+            {allRoutes.map(({ name, path, exact, RenderFn }) => (
+                <Route exact={exact} path={path} key={name} render={() => <RenderFn />} />
             ))}
 
             {/* NOT FOUND */}
