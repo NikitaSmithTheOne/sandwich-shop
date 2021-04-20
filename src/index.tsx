@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { BrowserRouter } from 'react-router-dom';
 
 // *** OTHER ***
 import './index.css';
@@ -19,7 +20,9 @@ const theme = createMuiTheme({
 ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root'),

@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, createStyles, Theme } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { HomeOutlined, ShoppingBasketOutlined } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 // *** OTHER ***
 import constants from '../../common/constants';
@@ -32,19 +33,24 @@ const NavigationHeader = (): JSX.Element => {
     // *** STYLES ***
     const classes = useStyles();
 
-    // *** THEME HOOK ***
+    // *** EXTERNAL HOOKS ***
     const theme = useTheme();
+    const history = useHistory();
 
     return (
         <div className={classes.root}>
             <div className={classes.content}>
                 {/* HOME */}
-                <Button color="secondary" variant="contained">
+                <Button color="secondary" variant="contained" onClick={() => history.push('/')}>
                     <HomeOutlined style={{ color: theme.palette.primary.light }} />
                 </Button>
 
                 {/* BASKET */}
-                <Button color="secondary" variant="contained">
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => history.push('/basket')}
+                >
                     <ShoppingBasketOutlined style={{ color: theme.palette.primary.light }} />
                 </Button>
             </div>
