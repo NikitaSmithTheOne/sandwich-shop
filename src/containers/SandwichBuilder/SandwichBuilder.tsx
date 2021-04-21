@@ -1,15 +1,10 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 // *** NPM ***
 import React, { useState } from 'react';
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 // *** OTHER ***
-import SandwichBread from '../../components/SandwichIngridients/SandwichBread';
-import SandwichBacon from '../../components/SandwichIngridients/SandwichBacon';
-import SandwichCheese from '../../components/SandwichIngridients/SandwichCheese';
-import SandwichCucumber from '../../components/SandwichIngridients/SandwichCucumber';
+import Sandwich, { SandwichIngredientType } from '../../components/Sandwich/Sandwich';
 
 // *** STYLES ***
 const useStyles = makeStyles((theme) =>
@@ -33,12 +28,6 @@ const useStyles = makeStyles((theme) =>
             width: '600px',
             marginBottom: '10px',
         },
-        sandwichOutput: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-        },
         baconButton: {
             color: '#b33e10',
             border: '2px solid #b33e10',
@@ -56,16 +45,6 @@ const useStyles = makeStyles((theme) =>
         },
     }),
 );
-
-// *** TYPES ***
-type SandwichIngredientType = 'bacon' | 'cheese' | 'cucumber';
-
-// *** MAPS ***
-const ingredientsMap: { [key in SandwichIngredientType]: JSX.Element } = {
-    bacon: <SandwichBacon />,
-    cheese: <SandwichCheese />,
-    cucumber: <SandwichCucumber />,
-};
 
 const SandwichBuilder = (): JSX.Element => {
     // *** STYLES ***
@@ -89,20 +68,6 @@ const SandwichBuilder = (): JSX.Element => {
             return newState;
         });
     };
-
-    // *** CONDITIONALS ***
-    // Sandwich Ingredients
-    const sandwichIngredients: JSX.Element[] = [];
-
-    ingredients.forEach((ingredient, index) => {
-        const ingredientComponent = (
-            <div key={`${ingredient + index}`} onClick={() => onDeleteIngredientHandler(index)}>
-                {ingredientsMap[ingredient]}
-            </div>
-        );
-
-        sandwichIngredients.push(ingredientComponent);
-    });
 
     return (
         <div className={classes.root}>
@@ -139,22 +104,10 @@ const SandwichBuilder = (): JSX.Element => {
             </div>
 
             {/* SANDWICH OUTPUT */}
-            <div className={classes.sandwichOutput}>
-                {/* SANDWICH TOP BREAD */}
-                <SandwichBread />
-
-                {/* SANDWICH INGREDIENTS */}
-                {sandwichIngredients.length > 0 ? (
-                    sandwichIngredients
-                ) : (
-                    <Typography color="primary" variant="h5" component="span">
-                        No ingredients yet
-                    </Typography>
-                )}
-
-                {/* SANDWICH BOTTOM BREAD */}
-                <SandwichBread />
-            </div>
+            <Sandwich
+                ingredients={ingredients}
+                onIngredientClick={(index) => onDeleteIngredientHandler(index)}
+            />
         </div>
     );
 };
