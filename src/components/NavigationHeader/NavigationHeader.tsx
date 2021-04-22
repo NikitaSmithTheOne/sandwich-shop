@@ -1,12 +1,14 @@
 // *** NPM ***
 import React from 'react';
-import { Button, createStyles, Theme } from '@material-ui/core';
+import { Button, createStyles, Theme, Typography } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { HomeOutlined, ShoppingBasketOutlined } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // *** OTHER ***
 import constants from '../../common/constants';
+import { StoreType } from '../../store';
 
 // *** STYLES ***
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,13 +31,33 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const NavigationHeader = (): JSX.Element => {
+// *** PROPS ***
+interface IProps {
+    orders: StoreType['orders'];
+}
+
+const NavigationHeader = (props: IProps): JSX.Element => {
     // *** STYLES ***
     const classes = useStyles();
+
+    // *** PROPS ***
+    const { orders } = props;
 
     // *** EXTERNAL HOOKS ***
     const theme = useTheme();
     const history = useHistory();
+
+    // *** CONDITIONALS ***
+    let ordersAmount = null;
+
+    if (Object.keys(orders).length > 0) {
+        ordersAmount = (
+            <Typography variant="body1" component="span" color="primary">
+                {Object.keys(orders).length}
+                &nbsp; &nbsp;
+            </Typography>
+        );
+    }
 
     return (
         <div className={classes.root}>
@@ -51,6 +73,7 @@ const NavigationHeader = (): JSX.Element => {
                     variant="contained"
                     onClick={() => history.push('/basket')}
                 >
+                    {ordersAmount}
                     <ShoppingBasketOutlined style={{ color: theme.palette.primary.light }} />
                 </Button>
             </div>
@@ -58,4 +81,11 @@ const NavigationHeader = (): JSX.Element => {
     );
 };
 
-export default NavigationHeader;
+// *** REDUX STORE ***
+const mapStateToProps = (state: StoreType) => {
+    return {
+        orders: state.orders,
+    };
+};
+
+export default connect(mapStateToProps)(NavigationHeader);
