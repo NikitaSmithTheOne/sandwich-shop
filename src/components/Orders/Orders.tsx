@@ -47,7 +47,12 @@ const Orders = (props: IProps): JSX.Element => {
     if (Object.keys(orders).length > 0) {
         Object.entries(orders).forEach(([key, value]) => {
             const orderOutput = (
-                <Order orderID={key} ingredients={value.ingredients} amount={value.amount} />
+                <Order
+                    key={key}
+                    orderID={key}
+                    ingredients={value.ingredients}
+                    amount={value.amount}
+                />
             );
             ordersOutput.push(orderOutput);
         });
