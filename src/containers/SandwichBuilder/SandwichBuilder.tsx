@@ -1,7 +1,7 @@
 // *** NPM ***
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, TextField } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 // *** OTHER ***
@@ -58,6 +58,20 @@ const useStyles = makeStyles((theme) =>
             border: '2px solid red',
             marginRight: '10px',
         },
+        sandwichOrder: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '600px',
+            marginTop: '20px',
+            border: `3px solid ${theme.palette.primary.main}`,
+            borderRadius: '10px',
+            padding: '20px',
+        },
+        sandwichOrderField: {
+            width: '400px',
+            margin: '10px auto',
+        },
     }),
 );
 
@@ -86,6 +100,29 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
     const onResetIngredientsHandler = () => {
         resetIngredients();
     };
+
+    // *** CONDITIONALS ***
+    const sandwichOrderForm =
+        ingredients.length > 0 ? (
+            <div className={classes.sandwichOrder}>
+                {/* TITLE */}
+                <Typography variant="h5" component="h2" color="primary">
+                    ORDER
+                </Typography>
+
+                {/* AMOUNT FILED */}
+                <TextField
+                    className={classes.sandwichOrderField}
+                    variant="outlined"
+                    label="Sandwiches Amount"
+                />
+
+                {/* SUBMIT */}
+                <Button variant="contained" color="secondary">
+                    ADD TO BASKET
+                </Button>
+            </div>
+        ) : null;
 
     return (
         <div className={classes.root}>
@@ -131,6 +168,9 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
                 ingredients={ingredients}
                 onIngredientClick={(index) => onDeleteIngredientHandler(index)}
             />
+
+            {/* ORDER FORM */}
+            {sandwichOrderForm}
         </div>
     );
 };
