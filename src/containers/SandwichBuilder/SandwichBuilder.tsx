@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Typography, TextField } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { useForm, Controller } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
 // *** OTHER ***
 import Sandwich, { SandwichIngredientType } from '../../components/Sandwich/Sandwich';
@@ -95,6 +96,7 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
 
     // *** EXTERNAL HOOKS ***
     const { handleSubmit, control, formState, reset } = useForm();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
@@ -116,6 +118,13 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
 
         // reset order form
         reset();
+
+        // success snack message
+        const snackBar = enqueueSnackbar('The order is in the basket now', {
+            variant: 'success',
+            anchorOrigin: { horizontal: 'right', vertical: 'top' },
+            onClick: () => closeSnackbar(snackBar),
+        });
     };
 
     // *** CONDITIONALS ***

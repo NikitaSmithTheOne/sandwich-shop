@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Typography, Modal, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 // *** OTHER ***
 import Order from './Order';
@@ -57,6 +58,7 @@ const Orders = (props: IProps): JSX.Element => {
 
     // *** EXTERNAL HOOKS ***
     const history = useHistory();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     // *** HANDLERS ***
     const onSuccessConfirmHandler = () => {
@@ -68,6 +70,16 @@ const Orders = (props: IProps): JSX.Element => {
 
         // redirect to home
         history.push('/');
+
+        // success snack message
+        const snackBar = enqueueSnackbar(
+            'We will contact you ASAP in order to confirm your order list',
+            {
+                variant: 'success',
+                anchorOrigin: { horizontal: 'right', vertical: 'top' },
+                onClick: () => closeSnackbar(snackBar),
+            },
+        );
     };
 
     // *** CONDITIONALS ***

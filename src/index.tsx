@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 // *** OTHER ***
 import store from './store';
@@ -25,9 +26,11 @@ ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <ThemeProvider theme={theme}>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
+                <SnackbarProvider maxSnack={5}>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </SnackbarProvider>
             </ThemeProvider>
         </Provider>
     </React.StrictMode>,
