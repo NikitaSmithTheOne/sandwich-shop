@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Button, createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
 import { HomeOutlined, ShoppingBasketOutlined } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 // *** OTHER ***
 import constants from '../../common/constants';
@@ -31,8 +32,9 @@ const NavigationHeader = (): JSX.Element => {
     // *** STYLES ***
     const classes = useStyles();
 
-    // *** THEME HOOK ***
+    // *** EXTERNAL HOOKS ***
     const theme = useTheme();
+    const history = useHistory();
 
     // *** USE EFFECT ***
     // componentDidMount
@@ -44,12 +46,16 @@ const NavigationHeader = (): JSX.Element => {
         <div className={classes.root}>
             <div className={classes.content}>
                 {/* HOME */}
-                <Button color="secondary" variant="contained">
+                <Button color="secondary" variant="contained" onClick={() => history.push('/')}>
                     <HomeOutlined style={{ color: theme.palette.primary.light }} />
                 </Button>
 
                 {/* BASKET */}
-                <Button color="secondary" variant="contained">
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => history.push('/basket')}
+                >
                     <ShoppingBasketOutlined style={{ color: theme.palette.primary.light }} />
                 </Button>
             </div>
