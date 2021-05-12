@@ -1,5 +1,6 @@
 // *** NPM ***
 import { createStore, compose, combineReducers } from 'redux';
+import { throttle } from 'lodash';
 
 // *** OTHER ***
 import { loadFromLocalStorage, saveToLocalStorage } from '../utils/local-storage';
@@ -7,6 +8,7 @@ import ingredientsReducer from './ingredients';
 
 // *** CONSTANTS ***
 const LOCAL_STORAGE_REDUX_NAME = 'REDUX_INGREDIENTS';
+const LOCAL_STORAGE_THROTTLE_TIME = 3000;
 
 // *** REDUX STORE ***
 const composeEnhancers =
@@ -25,9 +27,11 @@ const store = createStore(
     composeEnhancers(),
 );
 
-store.subscribe(() => {
-    saveToLocalStorage(store.getState(), LOCAL_STORAGE_REDUX_NAME);
-});
+store.subscribe(
+    throttle(() => {
+        saveToLocalStorage(store.getState(), LOCAL_STORAGE_REDUX_NAME);
+    }, LOCAL_STORAGE_THROTTLE_TIME),
+);
 
 export type StoreType = ReturnType<typeof rootReducer>;
 export type StoreDispatchType = typeof store.dispatch;
