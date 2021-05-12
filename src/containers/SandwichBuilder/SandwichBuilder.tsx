@@ -5,20 +5,10 @@ import React, { useState } from 'react';
 import { Button, makeStyles, Typography, createStyles } from '@material-ui/core';
 
 // *** OTHER ***
-import SandwichBread from '../../components/SandwichIngridients/SandwichBread';
-import SandwichBacon from '../../components/SandwichIngridients/SandwichBacon';
-import SandwichCheese from '../../components/SandwichIngridients/SandwichCheese';
-import SandwichCucumber from '../../components/SandwichIngridients/SandwichCucumber';
+import Sandwich from '../../components/Sandwich/Sandwich';
 
 // *** TYPES ***
 type SandwichIngredientType = 'bacon' | 'cheese' | 'cucumber';
-
-// *** MAPS ***
-const ingredientsMap: { [key in SandwichIngredientType]: JSX.Element } = {
-    bacon: <SandwichBacon />,
-    cheese: <SandwichCheese />,
-    cucumber: <SandwichCucumber />,
-};
 
 // *** STYLES ***
 const useStyles = makeStyles((theme) =>
@@ -90,20 +80,6 @@ const SandwichBuilder = (): JSX.Element => {
         });
     };
 
-    // *** CONDITIONALS ***
-    // Sandwich Ingredients
-    const sandwichIngredients: JSX.Element[] = [];
-
-    ingredients.forEach((ingredient, index) => {
-        const ingredientComponent = (
-            <div key={`${ingredient + index}`} onClick={() => onDeleteIngredientHandler(index)}>
-                {ingredientsMap[ingredient]}
-            </div>
-        );
-
-        sandwichIngredients.push(ingredientComponent);
-    });
-
     return (
         <div className={classes.root}>
             {/* TITLE */}
@@ -140,14 +116,10 @@ const SandwichBuilder = (): JSX.Element => {
 
             {/* SANDWICH OUTPUT */}
             <div className={classes.sandwichOutput}>
-                {/* TOP BREAD */}
-                <SandwichBread />
-
-                {/* INGREDIENTS */}
-                {sandwichIngredients}
-
-                {/* BOTTOM BREAD */}
-                <SandwichBread />
+                <Sandwich
+                    ingredients={ingredients}
+                    onIngredientClick={(index) => onDeleteIngredientHandler(index)}
+                />
             </div>
         </div>
     );
