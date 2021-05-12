@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 // *** NPM ***
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, makeStyles, Typography, createStyles } from '@material-ui/core';
 
 // *** OTHER ***
 import Sandwich from '../../components/Sandwich/Sandwich';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 // *** TYPES ***
 type SandwichIngredientType = 'bacon' | 'cheese' | 'cucumber';
@@ -61,11 +62,14 @@ const SandwichBuilder = (): JSX.Element => {
     const classes = useStyles();
 
     // *** USE STATE ***
-    const [ingredients, setIngredients] = useState<SandwichIngredientType[]>([]);
+    const [ingredientsStorage, setIngredientsStorage] = useLocalStorage<SandwichIngredientType[]>(
+        'ingredients',
+        [],
+    );
 
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
-        setIngredients((currentState) => {
+        setIngredientsStorage((currentState) => {
             const newState = [...currentState];
             newState.unshift(ingredient);
             return newState;
@@ -73,7 +77,7 @@ const SandwichBuilder = (): JSX.Element => {
     };
 
     const onDeleteIngredientHandler = (ingredientNumber: number) => {
-        setIngredients((currentState) => {
+        setIngredientsStorage((currentState) => {
             const newState = [...currentState];
             newState.splice(ingredientNumber, 1);
             return newState;
@@ -117,7 +121,7 @@ const SandwichBuilder = (): JSX.Element => {
             {/* SANDWICH OUTPUT */}
             <div className={classes.sandwichOutput}>
                 <Sandwich
-                    ingredients={ingredients}
+                    ingredients={ingredientsStorage}
                     onIngredientClick={(index) => onDeleteIngredientHandler(index)}
                 />
             </div>
