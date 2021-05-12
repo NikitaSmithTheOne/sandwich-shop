@@ -3,11 +3,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Provider } from 'react-redux';
 
 // *** OTHER ***
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import store from './store';
 
 // *** THEME ***
 const theme = createMuiTheme({
@@ -19,11 +21,13 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
     <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </ThemeProvider>
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root'),
 );

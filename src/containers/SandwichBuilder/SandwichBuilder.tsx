@@ -1,15 +1,18 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 // *** NPM ***
 import React from 'react';
-import { Button, makeStyles, Typography, createStyles } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { Button, Typography } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 // *** OTHER ***
-import Sandwich from '../../components/Sandwich/Sandwich';
-import useLocalStorage from '../../hooks/useLocalStorage';
-
-// *** TYPES ***
-type SandwichIngredientType = 'bacon' | 'cheese' | 'cucumber';
+import Sandwich, { SandwichIngredientType } from '../../components/Sandwich/Sandwich';
+import { StoreType, StoreDispatchType } from '../../store';
+import {
+    addIngredientAction,
+    addIngredientActionType,
+    deleteIngredientAction,
+    deleteIngredientActionType,
+} from '../../store/ingredients';
 
 // *** STYLES ***
 const useStyles = makeStyles((theme) =>
@@ -33,12 +36,6 @@ const useStyles = makeStyles((theme) =>
             width: '600px',
             marginBottom: '10px',
         },
-        sandwichOutput: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-        },
         baconButton: {
             color: '#b33e10',
             border: '2px solid #b33e10',
@@ -57,31 +54,26 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-const SandwichBuilder = (): JSX.Element => {
+// *** PROPS ***
+interface IProps {
+    ingredients: StoreType['ingredients'];
+    addIngredient: addIngredientActionType;
+    deleteIngredient: deleteIngredientActionType;
+}
+
+const SandwichBuilder = (props: IProps): JSX.Element => {
     // *** STYLES ***
     const classes = useStyles();
 
-    // *** USE STATE ***
-    const [ingredientsStorage, setIngredientsStorage] = useLocalStorage<SandwichIngredientType[]>(
-        'ingredients',
-        [],
-    );
+    // *** PROPS ***
+    const { ingredients, addIngredient, deleteIngredient } = props;
 
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
-        setIngredientsStorage((currentState) => {
-            const newState = [...currentState];
-            newState.unshift(ingredient);
-            return newState;
-        });
+        addIngredient({ ingredient });
     };
-
-    const onDeleteIngredientHandler = (ingredientNumber: number) => {
-        setIngredientsStorage((currentState) => {
-            const newState = [...currentState];
-            newState.splice(ingredientNumber, 1);
-            return newState;
-        });
+    const onDeleteIngredientHandler = (ingredientIndex: number) => {
+        deleteIngredient({ ingredientIndex });
     };
 
     return (
@@ -119,14 +111,28 @@ const SandwichBuilder = (): JSX.Element => {
             </div>
 
             {/* SANDWICH OUTPUT */}
-            <div className={classes.sandwichOutput}>
-                <Sandwich
-                    ingredients={ingredientsStorage}
-                    onIngredientClick={(index) => onDeleteIngredientHandler(index)}
-                />
-            </div>
+            <Sandwich
+                ingredients={ingredients}
+                onIngredientClick={(index) => onDeleteIngredientHandler(index)}
+            />
         </div>
     );
 };
 
-export default SandwichBuilder;
+// *** REDUX STORE ***
+const mapStateToProps = (state: StoreType) => {
+    return {
+        ingredients: state.ingredients,
+    };
+};
+
+const mapDispatchToProps = (dispatch: StoreDispatchType) => {
+    return {
+        addIngredient: ({ ingredient }: { ingredient: SandwichIngredientType }) =>
+            dispatch(addIngredientAction({ ingredient })),
+        deleteIngredient: ({ ingredientIndex }: { ingredientIndex: number }) =>
+            dispatch(deleteIngredientAction({ ingredientIndex })),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SandwichBuilder);
