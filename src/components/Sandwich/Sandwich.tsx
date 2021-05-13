@@ -36,7 +36,7 @@ const ingredientsMap: { [key in SandwichIngredientType]: JSX.Element } = {
 // *** PROPS ***
 interface IProps {
     ingredients: SandwichIngredientType[];
-    onIngredientClick: (ingredientIndex: number) => void;
+    onIngredientClick?: (ingredientIndex: number) => void;
 }
 
 const Sandwich = (props: IProps): JSX.Element => {
@@ -44,7 +44,7 @@ const Sandwich = (props: IProps): JSX.Element => {
     const classes = useStyles();
 
     // *** PROPS ***
-    const { ingredients, onIngredientClick } = props;
+    const { ingredients, onIngredientClick = () => null } = props;
 
     // *** CONDITIONALS ***
     // Sandwich Ingredients
@@ -78,6 +78,10 @@ const Sandwich = (props: IProps): JSX.Element => {
             <SandwichBread />
         </div>
     );
+};
+
+Sandwich.defaultProps = {
+    onIngredientClick: () => null,
 };
 
 export default Sandwich;
