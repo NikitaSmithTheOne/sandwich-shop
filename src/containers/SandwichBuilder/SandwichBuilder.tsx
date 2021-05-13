@@ -16,6 +16,7 @@ import {
     resetIngredientsAction,
     resetIngredientsActionType,
 } from '../../store/ingredients';
+import { addOrderAction, addOrderActionType } from '../../store/orders';
 
 // *** STYLES ***
 const useStyles = makeStyles((theme) =>
@@ -82,6 +83,7 @@ interface IProps {
     addIngredient: addIngredientActionType;
     deleteIngredient: deleteIngredientActionType;
     resetIngredients: resetIngredientsActionType;
+    addOrder: addOrderActionType;
 }
 
 const SandwichBuilder = (props: IProps): JSX.Element => {
@@ -89,10 +91,10 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
     const classes = useStyles();
 
     // *** PROPS ***
-    const { ingredients, addIngredient, deleteIngredient, resetIngredients } = props;
+    const { ingredients, addIngredient, deleteIngredient, resetIngredients, addOrder } = props;
 
     // *** EXTERNAL HOOKS ***
-    const { handleSubmit, control, formState } = useForm();
+    const { handleSubmit, control, formState, reset } = useForm();
 
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
@@ -106,9 +108,18 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
         resetIngredients();
     };
 
-    const onSubmitHandler = (data: { amount: string }) => {
+    const onSubmitHandler = (data: { amount: number }) => {
         // TODO: MAKE SOMETHING USEFUL
         console.log(data);
+
+        // add order to redux store
+        addOrder({ ingredients, amount: data.amount });
+
+        // reset ingredients store
+        resetIngredients();
+
+        // reset form
+        reset();
     };
 
     // *** CONDITIONALS ***
@@ -224,11 +235,20 @@ const mapStateToProps = (state: StoreType) => {
 
 const mapDispatchToProps = (dispatch: StoreDispatchType) => {
     return {
+        // ingredients
         addIngredient: ({ ingredient }: { ingredient: SandwichIngredientType }) =>
             dispatch(addIngredientAction({ ingredient })),
         deleteIngredient: ({ ingredientIndex }: { ingredientIndex: number }) =>
             dispatch(deleteIngredientAction({ ingredientIndex })),
         resetIngredients: () => dispatch(resetIngredientsAction()),
+        // orders
+        addOrder: ({
+            ingredients,
+            amount,
+        }: {
+            ingredients: SandwichIngredientType[];
+            amount: number;
+        }) => dispatch(addOrderAction({ ingredients, amount })),
     };
 };
 
