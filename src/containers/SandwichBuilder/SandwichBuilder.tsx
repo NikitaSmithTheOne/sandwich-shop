@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, TextField, Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { useForm, Controller } from 'react-hook-form';
 
 // *** OTHER ***
 import Sandwich, { SandwichIngredientType } from '../../components/Sandwich/Sandwich';
@@ -90,6 +91,9 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
     // *** PROPS ***
     const { ingredients, addIngredient, deleteIngredient, resetIngredients } = props;
 
+    // *** EXTERNAL HOOKS ***
+    const { handleSubmit, control, formState } = useForm();
+
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
         addIngredient({ ingredient });
@@ -102,27 +106,62 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
         resetIngredients();
     };
 
+    const onSubmitHandler = (data: { amount: string }) => {
+        // TODO: MAKE SOMETHING USEFUL
+        console.log(data);
+    };
+
     // *** CONDITIONALS ***
     const sandwichOrderForm =
         ingredients.length > 0 ? (
-            <div className={classes.sandwichOrder}>
-                {/* TITLE */}
-                <Typography variant="h5" component="h2" color="primary">
-                    ORDER
-                </Typography>
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
+                <div className={classes.sandwichOrder}>
+                    {/* TITLE */}
+                    <Typography variant="h5" component="h2" color="primary">
+                        ORDER
+                    </Typography>
 
-                {/* AMOUNT FILED */}
-                <TextField
-                    className={classes.sandwichOrderField}
-                    variant="outlined"
-                    label="Sandwiches Amount"
-                />
+                    {/* AMOUNT FILED */}
+                    <Controller
+                        render={({ field }) => {
+                            return (
+                                <TextField
+                                    className={classes.sandwichOrderField}
+                                    variant="outlined"
+                                    label="Sandwiches Amount"
+                                    error={!!formState.errors?.amount?.message}
+                                    helperText={formState.errors?.amount?.message}
+                                    // eslint-disable-next-line react/jsx-props-no-spreading
+                                    {...field}
+                                />
+                            );
+                        }}
+                        name="amount"
+                        control={control}
+                        rules={{
+                            required: { value: true, message: 'The field is required' },
+                            min: {
+                                value: 1,
+                                message: 'The value should greater than 0',
+                            },
+                            max: {
+                                value: 100,
+                                message: 'The value should be less or equal to 100',
+                            },
+                            pattern: {
+                                value: /^\d+$/g,
+                                message: 'The value should be integer',
+                            },
+                        }}
+                        defaultValue=""
+                    />
 
-                {/* SUBMIT */}
-                <Button variant="contained" color="secondary">
-                    ADD TO BASKET
-                </Button>
-            </div>
+                    {/* SUBMIT */}
+                    <Button variant="contained" color="secondary" type="submit">
+                        ADD TO BASKET
+                    </Button>
+                </div>
+            </form>
         ) : null;
 
     return (
