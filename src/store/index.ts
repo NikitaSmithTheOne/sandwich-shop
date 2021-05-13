@@ -31,7 +31,10 @@ const store = createStore(
 
 store.subscribe(
     throttle(() => {
-        saveToLocalStorage(store.getState(), LOCAL_STORAGE_REDUX_NAME);
+        saveToLocalStorage(
+            { ingredients: store.getState().ingredients, orders: store.getState().orders },
+            LOCAL_STORAGE_REDUX_NAME,
+        );
     }, LOCAL_STORAGE_THROTTLE_TIME),
 );
 
