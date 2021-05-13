@@ -4,6 +4,7 @@ import { SandwichIngredientType } from '../components/Sandwich/Sandwich';
 // *** ACTION TYPES ***
 type ADD_INGREDIENT = 'ADD_INGREDIENT';
 type DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+type RESET_INGREDIENTS = 'RESET_INGREDIENTS';
 
 // *** ACTION INTERFACES ***
 interface IAddIngredientAction {
@@ -16,7 +17,11 @@ interface IDeleteIngredientAction {
     ingredientIndex: number;
 }
 
-type ActionTypes = IAddIngredientAction | IDeleteIngredientAction;
+interface IResetIngredientsAction {
+    type: RESET_INGREDIENTS;
+}
+
+type ActionTypes = IAddIngredientAction | IDeleteIngredientAction | IResetIngredientsAction;
 
 // *** ACTIONS ***
 // Add Ingredient
@@ -47,6 +52,15 @@ export const deleteIngredientAction: deleteIngredientActionType = ({ ingredientI
     };
 };
 
+// Reset Ingredients
+export type resetIngredientsActionType = () => IResetIngredientsAction;
+
+export const resetIngredientsAction: resetIngredientsActionType = () => {
+    return {
+        type: 'RESET_INGREDIENTS',
+    };
+};
+
 // ***INITIAL STATE ***
 export type IngredientStateType = SandwichIngredientType[];
 const initialState: IngredientStateType = [];
@@ -63,6 +77,9 @@ const reducer = (state = initialState, action: ActionTypes): SandwichIngredientT
             const newState = [...state];
             newState.splice(action.ingredientIndex, 1);
             return newState;
+        }
+        case 'RESET_INGREDIENTS': {
+            return initialState;
         }
         default:
             return state;

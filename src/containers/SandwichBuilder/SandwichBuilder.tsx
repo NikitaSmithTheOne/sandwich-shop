@@ -12,6 +12,8 @@ import {
     addIngredientActionType,
     deleteIngredientAction,
     deleteIngredientActionType,
+    resetIngredientsAction,
+    resetIngredientsActionType,
 } from '../../store/ingredients';
 
 // *** STYLES ***
@@ -51,6 +53,11 @@ const useStyles = makeStyles((theme) =>
             border: '2px solid #36b310',
             marginRight: '10px',
         },
+        resetButton: {
+            color: 'red',
+            border: '2px solid red',
+            marginRight: '10px',
+        },
     }),
 );
 
@@ -59,6 +66,7 @@ interface IProps {
     ingredients: StoreType['ingredients'];
     addIngredient: addIngredientActionType;
     deleteIngredient: deleteIngredientActionType;
+    resetIngredients: resetIngredientsActionType;
 }
 
 const SandwichBuilder = (props: IProps): JSX.Element => {
@@ -66,7 +74,7 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
     const classes = useStyles();
 
     // *** PROPS ***
-    const { ingredients, addIngredient, deleteIngredient } = props;
+    const { ingredients, addIngredient, deleteIngredient, resetIngredients } = props;
 
     // *** HANDLERS ***
     const onAddIngredientHandler = (ingredient: SandwichIngredientType) => {
@@ -74,6 +82,10 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
     };
     const onDeleteIngredientHandler = (ingredientIndex: number) => {
         deleteIngredient({ ingredientIndex });
+    };
+
+    const onResetIngredientsHandler = () => {
+        resetIngredients();
     };
 
     return (
@@ -108,6 +120,11 @@ const SandwichBuilder = (props: IProps): JSX.Element => {
                 >
                     +1 Cucumber
                 </Button>
+
+                {/* RESET */}
+                <Button className={classes.resetButton} onClick={() => onResetIngredientsHandler()}>
+                    Reset
+                </Button>
             </div>
 
             {/* SANDWICH OUTPUT */}
@@ -132,6 +149,7 @@ const mapDispatchToProps = (dispatch: StoreDispatchType) => {
             dispatch(addIngredientAction({ ingredient })),
         deleteIngredient: ({ ingredientIndex }: { ingredientIndex: number }) =>
             dispatch(deleteIngredientAction({ ingredientIndex })),
+        resetIngredients: () => dispatch(resetIngredientsAction()),
     };
 };
 
